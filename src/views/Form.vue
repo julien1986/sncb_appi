@@ -15,20 +15,17 @@
     </b-field>
     <b-field label="email ">
       <b-input type="email" v-model="ident.email"></b-input>
-      <span v-show="!$v.ident.email.$error && !$v.ident.email.required">Champ obligatoire /</span>
-      <span v-show="!$v.ident.email.$error && !$v.ident.email.email">Mail intranet</span>
+      <span v-show="!$v.ident.email.required">Champ obligatoire</span>
+      <span v-show="!$v.ident.email.$error">Mail intranet</span>
     </b-field>
-    <b-button
-      @click.prevent="identification"
-      :disabled="$v.ident.$invalid"
-      type="is-success"
-    >Success</b-button>
+    <b-button @click.prevent="connexion" :disabled="$v.ident.$invalid" type="is-success">Success</b-button>
   </section>
 </template>
 
 <script>
 import {required, minLength, email} from 'vuelidate/lib/validators'
 import customValidators from '@/tools/customValidators'
+import Store from '@/store.js'
 
 export default {
   name: "Form",
@@ -39,6 +36,11 @@ export default {
         prenom: "",
         email:""
       }
+    }
+  },
+  computed:{
+    whoIsConnect(){
+      return Store.getters.identification
     }
   },
   validations:{
@@ -60,10 +62,10 @@ export default {
     }
   },
   methods:{
-    identification(){
-      console.log(this.ident)
-    }
-  }
+    connexion(){
+      Store.commit('connexion', this.ident)
+      }
+  },
 }
 </script>
 

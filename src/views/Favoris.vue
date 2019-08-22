@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <section>
-      <h1 class="title is-2">Bienvenue sur les trains de la SNCB</h1>
+      <h1 class="title is-2">{{bonjour}}</h1>
       <hr>
       <div>
         <nav class="panel">
@@ -41,6 +41,7 @@
 
 import SncbService from "@/services/Sncb"
 import trains from '@/components/trains.vue'
+import Store from '@/store.js'
 
 export default {
   name: "Accueil",
@@ -48,7 +49,7 @@ export default {
     return{
       favoris: [],
       isModalActive: false,
-      id_gare:""
+      id_gare:"",
     }
   },
   components:{
@@ -72,6 +73,11 @@ export default {
         this.$root.favoris = false
         this.$router.push("/")
       }
+    },
+  },
+  computed:{
+    bonjour(){
+      return Store.getters.favoris
     }
   }
 }
