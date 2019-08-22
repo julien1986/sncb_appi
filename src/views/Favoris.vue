@@ -6,20 +6,20 @@
       <div>
         <nav class="panel">
           <p class="panel-heading">Liste des gares</p>
-          <!-- Pour chaque "item" dans "gares", je dis que "gare" est égal à l'objet "item"-->
+          <!-- Pour chaque instance d'"item" dans "favoris", je dis que "favori" est égal à "item"-->
           <a
-            v-for="item in gares"
-            :gare="item"
+            v-for="item in favoris"
+            :favori="item"
             @click="showTrains(item.id)"
             class="panel-block is-active"
           >
             <span class="panel-icon">
               <i class="fas fa-warehouse" aria-hidden="true"></i>
             </span>
-            <!-- c'est ici que je me sert du contenu -->
+            <!-- c'est ici que je me sert du contenu de item -->
             {{item.name}}
-            <a @click.stop.prevent="addFav(item.id, item.name)">
-              <b-icon pack="far" icon="star" size="is-small"></b-icon>
+            <a @click.stop.prevent="delFav(item.id)">
+              <b-icon pack="fa" icon="trash" size="is-small"></b-icon>
             </a>
           </a>
         </nav>
@@ -46,8 +46,7 @@ export default {
   name: "Accueil",
   data(){
     return{
-      gares: [],
-      favoris:[],
+      favoris: [],
       isModalActive: false,
       id_gare:""
     }
@@ -56,8 +55,6 @@ export default {
     trains
   },
   created(){
-    SncbService.getStations()
-    .then(response => this.gares = response.station)
     if(localStorage.favoris){
       this.favoris = JSON.parse(localStorage.getItem("favoris"))
     }
@@ -67,11 +64,14 @@ export default {
       this.isModalActive = true
       this.id_gare = idGare
     },
-    addFav(id, name){
-      console.log( "j'ai id " + id + " et j'ai le nom " + name)
-      this.favoris.push({id, name})
+    delFav(id){
+      this.favoris.splice(id,1)
       localStorage.setItem("favoris", JSON.stringify(this.favoris))
-      this.$root.favoris = true
+      if(this.favoris.length == 0){
+        localStorage.removeItem("favoris")
+        this.$root.favoris = false
+        this.$router.push("/")
+      }
     }
   }
 }

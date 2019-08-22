@@ -1,11 +1,24 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Accueil</router-link>
+      <router-link to="/">Accueil |</router-link>
+      <router-link v-if="this.$root.favoris" to="/favoris">Favoris |</router-link>
+      <router-link to="/formulaire">Formulaire</router-link>
     </div>
     <router-view/>
   </div>
 </template>
+<script>
+export default {
+  data(){
+    return{
+      favoris:[],
+      affiche: false
+    }
+  }
+}
+</script>
+
 
 <style lang="scss">
 #app {
