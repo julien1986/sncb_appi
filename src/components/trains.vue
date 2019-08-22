@@ -5,7 +5,12 @@
       <h1>Trains au départ de {{stationName}}</h1>
       <b-table :data="trains" :paginated="isPaginated" :per-page="10">
         <template slot-scope="props">
-          <b-table-column field="station" label="to station" sortable>{{ props.row.station }}</b-table-column>
+          <b-table-column
+            class="toSation"
+            field="station"
+            label="to station"
+            sortable
+          >{{ props.row.station }}</b-table-column>
           <b-table-column field="time" label="time" sortable>{{ props.row.time | date}}</b-table-column>
           <b-table-column field="delay" label="delay" sortable>{{ props.row.delay }} mins</b-table-column>
           <b-table-column
@@ -45,7 +50,9 @@ export default {
     SncbService.getTrains(this.idGare)
     .then(response => {
       this.trains = response.departures.departure
-      this.stationName = response.station})
+      this.stationName = response.station
+      this.$emit("loading", true)}
+      )
     .cath(error => this.errorTrains = true)
   }
 }
@@ -54,6 +61,10 @@ export default {
 <style lang="scss">
 .canceled {
   color: #f00;
+}
+.toSation {
+  background: #f00;
+  color: #fff;
 }
 </style>
 

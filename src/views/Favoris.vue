@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
     <section>
       <h1 class="title is-2">{{bonjour}}</h1>
       <hr>
@@ -29,7 +30,7 @@
       <b-modal :active.sync="isModalActive" has-modal-card>
         <div class="card">
           <div class="card-content">
-            <trains :idGare="id_gare"></trains>
+            <trains :idGare="id_gare" @loading="isLoading=false"></trains>
           </div>
         </div>
       </b-modal>
@@ -50,6 +51,7 @@ export default {
       favoris: [],
       isModalActive: false,
       id_gare:"",
+      isLoading: false
     }
   },
   components:{
@@ -58,12 +60,14 @@ export default {
   created(){
     if(localStorage.favoris){
       this.favoris = JSON.parse(localStorage.getItem("favoris"))
+      this.isLoading = false
     }
   },
   methods: {
     showTrains(idGare) {
       this.isModalActive = true
       this.id_gare = idGare
+      this.isLoading = true
     },
     delFav(id){
       this.favoris.splice(id,1)
